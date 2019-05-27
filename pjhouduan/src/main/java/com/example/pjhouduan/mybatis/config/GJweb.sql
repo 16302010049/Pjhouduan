@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS CourseStudent
     id           INT NOT NULL AUTO_INCREMENT,
     course_id    INT NOT NULL,
     student_id   INT NOT NULL,
-    progress     INT NOT NULL,
+    progress     FLOAT NOT NULL,
     studysection JSON,
     PRIMARY KEY (id),
     FOREIGN KEY (course_id) REFERENCES Course (id),

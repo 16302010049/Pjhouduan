@@ -28,6 +28,9 @@ public class CourseJson {
         this.content = content;
     }
 
+    public CourseJson() {
+    }
+
     public int getId() {
         return id;
     }

@@ -1,13 +1,14 @@
 package com.example.pjhouduan.controller;
 
 import com.example.pjhouduan.mybatis.SqlSessionLoader;
-import com.example.pjhouduan.mybatis.po.Course;
-import com.example.pjhouduan.mybatis.po.CourseJson;
-import com.example.pjhouduan.mybatis.po.Teacher;
+import com.example.pjhouduan.mybatis.po.*;
 import com.example.pjhouduan.request.AddLessonRequest;
+import com.example.pjhouduan.request.AnswerRecordRequest;
 import com.example.pjhouduan.request.TeacherLoginRequest;
 import com.example.pjhouduan.request.TeacherRegisterRequest;
+import com.example.pjhouduan.response.AnswerRecordResponse;
 import com.example.pjhouduan.response.GreetingResponse;
+import com.example.pjhouduan.response.StudentListResponse;
 import com.google.gson.Gson;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,5 +102,31 @@ public class TeacherController {
     }
 
     @RequestMapping(path = "/studentList",method = RequestMethod.GET)
-    public @ResponseBody
+    public @ResponseBody StudentListResponse[] getStudentList(@RequestParam int course_id) throws IOException{
+        SqlSession sqlSession = SqlSessionLoader.getSqlSession();
+        List<StudentListResponse> studentListResponseList = sqlSession.selectList("GJweb.Mapper.getStudentList",course_id);
+        StudentListResponse[] studentListResponses = new StudentListResponse[studentListResponseList.size()];
+        studentListResponseList.toArray(studentListResponses);
+        return studentListResponses;
+    }
+
+    @RequestMapping(path="/answerRecord",method = RequestMethod.POST)
+    public @ResponseBody AnswerRecordResponse[] getAnswerRecord(@RequestBody AnswerRecordRequest answerRecordRequest) throws IOException{
+        SqlSession sqlSession = SqlSessionLoader.getSqlSession();
+        List<AnswerRecordResponse> answerRecordResponseList = sqlSession.selectList("GJweb.Mapper.getAnswerRecord",answerRecordRequest);
+        AnswerRecordResponse[] answerRecordResponses = new AnswerRecordResponse[answerRecordResponseList.size()];
+        answerRecordResponseList.toArray(answerRecordResponses);
+        return answerRecordResponses;
+    }
+
+    @RequestMapping(path = "/deleteCourse",method = RequestMethod.GET)
+    public @ResponseBody Object deleteCourse(@RequestParam int course_id) throws IOException{
+        SqlSession sqlSession = SqlSessionLoader.getSqlSession();
+        sqlSession.delete("GJweb.Mapper.deleteCourseStudent",course_id);
+        sqlSession.delete("GJweb.Mapper.deleteAnswerRecord",course_id);
+        sqlSession.delete("GJweb.Mapper.deleteCourse",course_id);
+        sqlSession.commit();
+        sqlSession.close();
+        return  new GreetingResponse(12,"fjlak");
+    }
 }

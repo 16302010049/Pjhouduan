@@ -30,6 +30,111 @@
     <update id="updateLesson" parameterType="com.example.pjhouduan.mybatis.po.CourseJson">
         update course
         set content = #{content}
-        where id =#{id}
+        where id = #{id}
     </update>
+    <select id="getStudentList" parameterType="int" resultType="com.example.pjhouduan.response.StudentListResponse">
+        select student.id, name, studentnumber, progress
+        from coursestudent
+                 join student on student_id = student.id
+        where course_id = #{course_id}
+    </select>
+    <select id="getAnswerRecord" parameterType="com.example.pjhouduan.request.AnswerRecordRequest"
+            resultType="com.example.pjhouduan.response.AnswerRecordResponse">
+        select student.id, name, choice, question
+        from answerrecord
+                 join student on student_id = student.id
+        where course_id = #{course_id}
+          and chapter = #{chapter}
+          and section = #{section}
+    </select>
+    <delete id="deleteCourseStudent" parameterType="int">
+        delete
+        from coursestudent
+        where course_id = #{course_id}
+    </delete>
+    <delete id="deleteAnswerRecord" parameterType="int">
+        delete
+        from answerrecord
+        where course_id = #{course_id}
+    </delete>
+    <delete id="deleteCourse" parameterType="int">
+        delete
+        from course
+        where id = #{course_id}
+    </delete>
+    <select id="selectstubysig" parameterType="String" resultType="com.example.pjhouduan.mybatis.po.Student">
+        select *
+        from student
+        where signature = #{signature}
+    </select>
+    <insert id="addStu" parameterType="com.example.pjhouduan.mybatis.po.Student" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into student(signature, mailbox, sex, name, studentnumber)
+        values (#{signature}, #{mailbox}, #{sex}, #{name}, #{studentnumber})
+    </insert>
+    <select id="getallcourses" resultType="com.example.pjhouduan.mybatis.po.Course">
+        select *
+        from course
+    </select>
+    <select id="getcoursebycourseid" resultType="com.example.pjhouduan.mybatis.po.CourseJson">
+        select *
+        from course
+        where id = #{id}
+    </select>
+    <select id="getcoursebyid" resultType="String">
+        select course_id
+        from coursestudent
+        where student_id = #{id}
+
+    </select>
+    <insert id="addcourse" parameterType="com.example.pjhouduan.request.AddCourseRequest" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into coursestudent(course_id, student_id, progress, studysection)
+        values (#{course_id}, #{student_id}, #{progress}, #{studysection})
+    </insert>
+    <select id="getcoursestu" parameterType="com.example.pjhouduan.request.UpdatePro"
+            resultType="com.example.pjhouduan.request.AddCourseRequest">
+        SELECT *
+        from coursestudent
+        WHERE (course_id = #{course_id})
+          AND (student_id = #{student_id})
+    </select>
+    <update id="updatecoursestu" parameterType="com.example.pjhouduan.request.AddCourseRequest">
+        UPDATE coursestudent
+        SET studysection=#{studysection}
+        WHERE course_id = #{course_id}and(student_id = #{student_id})
+    </update>
+    <update id="updatestuinfo" parameterType="com.example.pjhouduan.mybatis.po.Student">
+        update student
+        set mailbox=#{mailbox},
+            sex=#{sex},
+            name=#{name},
+            studentnumber=#{studentnumber}
+        where id = #{id}
+    </update>
+    <insert id="addanswerrecord" parameterType="com.example.pjhouduan.mybatis.po.AnswerRecord" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into answerrecord(student_id, course_id, chapter, section, question, choice)
+        values (#{student_id}, #{course_id}, #{chapter}, #{section}, #{question}, #{choice})
+    </insert>
+    <insert id="addcollection" parameterType="com.example.pjhouduan.mybatis.po.Collection" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into collect(stu_id, question, answer, note)
+        values (#{stu_id}, #{question}, #{answer}, #{note})
+    </insert>
+    <select id="getcollect" resultType="com.example.pjhouduan.mybatis.po.Collection">
+        select *
+        from collect
+        where stu_id = #{id}
+    </select>
+    <update id="updatecollect" parameterType="com.example.pjhouduan.mybatis.po.Collection">
+        update collect
+        set note=#{note}
+        where stu_id = #{stu_id}
+    </update>
+    <delete id="daletecollect">
+        delete
+        from collect
+        where id = #{id}
+    </delete>
 </mapper>
