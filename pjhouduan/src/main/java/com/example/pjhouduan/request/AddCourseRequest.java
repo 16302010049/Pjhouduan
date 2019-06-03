@@ -4,7 +4,7 @@ public class AddCourseRequest {
     private int id;
     private String course_id;
     private String student_id;
-    private String progress;
+    private float progress;
     private String studysection;
     public AddCourseRequest(){
 
@@ -18,9 +18,6 @@ public class AddCourseRequest {
         this.student_id = student_id;
     }
 
-    public void setProgress(String progress) {
-        this.progress = progress;
-    }
     public void setStudysection(String section){
         this.studysection=section;
     }
@@ -37,8 +34,12 @@ public class AddCourseRequest {
         return id;
     }
 
-    public String getProgress() {
+    public float getProgress() {
         return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
     }
 
     public String getStudent_id() {

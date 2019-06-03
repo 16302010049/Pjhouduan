@@ -72,16 +72,16 @@
         insert into student(signature, mailbox, sex, name, studentnumber)
         values (#{signature}, #{mailbox}, #{sex}, #{name}, #{studentnumber})
     </insert>
-    <select id="getallcourses" resultType="com.example.pjhouduan.mybatis.po.Course">
-        select *
-        from course
+    <select id="getallcourses" resultType="com.example.pjhouduan.mybatis.po.CourseStuJson">
+        select course.id, teacher_id, title, subtitle, background, introduce, content,name as teacher_name,head as teacher_head
+        from course join teacher on course.teacher_id = teacher.id
     </select>
-    <select id="getcoursebycourseid" resultType="com.example.pjhouduan.mybatis.po.CourseJson">
-        select *
-        from course
-        where id = #{id}
+    <select id="getcoursebycourseid" resultType="com.example.pjhouduan.mybatis.po.CourseStuJson">
+        select course.id, teacher_id, title, subtitle, background, introduce, content,name as teacher_name,head as teacher_head
+        from course join teacher on course.teacher_id = teacher.id
+        where course.id = #{course_id}
     </select>
-    <select id="getcoursebyid" resultType="String">
+    <select id="getcoursebyid" resultType="int">
         select course_id
         from coursestudent
         where student_id = #{id}
@@ -101,7 +101,7 @@
     </select>
     <update id="updatecoursestu" parameterType="com.example.pjhouduan.request.AddCourseRequest">
         UPDATE coursestudent
-        SET studysection=#{studysection}
+        SET studysection=#{studysection} , progress = #{progress}
         WHERE course_id = #{course_id}and(student_id = #{student_id})
     </update>
     <update id="updatestuinfo" parameterType="com.example.pjhouduan.mybatis.po.Student">
@@ -137,4 +137,20 @@
         from collect
         where id = #{id}
     </delete>
+    <select id="getStudySection" parameterType="com.example.pjhouduan.request.getProcessRequest" resultType="string">
+        select studysection
+        from coursestudent
+        WHERE course_id = #{course_id} and student_id = #{student_id}
+    </select>
+    <delete id="deleteStuLesson" parameterType="com.example.pjhouduan.request.DeleteLessonRequest">
+        delete from coursestudent
+        where student_id = #{student_id} and course_id = #{course_id}
+    </delete>
+    <delete id="delAnswerRecord" parameterType="com.example.pjhouduan.request.DeleteLessonRequest">
+        delete from answerrecord
+        where student_id = #{student_id} and course_id = #{course_id}
+    </delete>
+    <select id="checkName" parameterType="string" resultType="string">
+        select name from teacher where name = #{name}
+    </select>
 </mapper>

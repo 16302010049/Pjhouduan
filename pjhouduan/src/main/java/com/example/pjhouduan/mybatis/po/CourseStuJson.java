@@ -1,6 +1,11 @@
 package com.example.pjhouduan.mybatis.po;
 
-public class CourseJson {
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
+
+public class CourseStuJson {
     private int id;
     private int teacher_id;
     private String title;
@@ -8,28 +13,8 @@ public class CourseJson {
     private String background;
     private String introduce;
     private String content;
-
-    public CourseJson(int id, int teacher_id, String title, String subtitle, String background, String introduce, String content) {
-        this.id = id;
-        this.teacher_id = teacher_id;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.background = background;
-        this.introduce = introduce;
-        this.content = content;
-    }
-
-    public CourseJson(int teacher_id, String title, String subtitle, String background, String introduce, String content) {
-        this.teacher_id = teacher_id;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.background = background;
-        this.introduce = introduce;
-        this.content = content;
-    }
-
-    public CourseJson() {
-    }
+    private String teacher_name;
+    private String teacher_head;
 
     public int getId() {
         return id;
@@ -87,5 +72,30 @@ public class CourseJson {
         this.content = content;
     }
 
+    public String getTeacher_name() {
+        return teacher_name;
+    }
 
+    public void setTeacher_name(String teacher_name) {
+        this.teacher_name = teacher_name;
+    }
+
+    public String getTeacher_head() {
+        return teacher_head;
+    }
+
+    public void setTeacher_head(String teacher_head) {
+        this.teacher_head = teacher_head;
+    }
+
+    public static CourseStu coursestujson2coursestu(CourseStuJson courseStuJson) {
+        Gson gson = new Gson();
+        // 将 json 转化 成 List泛型
+        List<Chapter> stus = gson.fromJson(courseStuJson.getContent(), new TypeToken<List<Chapter>>() {
+        }.getType());
+        Chapter[] chapters = new Chapter[stus.size()];
+        stus.toArray(chapters);
+        return new CourseStu(courseStuJson.id,courseStuJson.teacher_id,courseStuJson.title,courseStuJson.subtitle,courseStuJson.background,courseStuJson.introduce,
+                chapters,courseStuJson.teacher_name,courseStuJson.teacher_head);
+    }
 }

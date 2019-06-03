@@ -7,6 +7,7 @@ import com.example.pjhouduan.request.AnswerRecordRequest;
 import com.example.pjhouduan.request.TeacherLoginRequest;
 import com.example.pjhouduan.request.TeacherRegisterRequest;
 import com.example.pjhouduan.response.AnswerRecordResponse;
+import com.example.pjhouduan.response.CommonResponse;
 import com.example.pjhouduan.response.GreetingResponse;
 import com.example.pjhouduan.response.StudentListResponse;
 import com.google.gson.Gson;
@@ -128,5 +129,20 @@ public class TeacherController {
         sqlSession.commit();
         sqlSession.close();
         return  new GreetingResponse(12,"fjlak");
+    }
+
+    @RequestMapping(path = "/checkName",method = RequestMethod.GET)
+    public @ResponseBody  CommonResponse checkName(@RequestParam String name) throws IOException{
+        SqlSession sqlSession = SqlSessionLoader.getSqlSession();
+        String re = "";
+        re = sqlSession.selectOne("GJweb.Mapper.checkName",name);
+        sqlSession.commit();
+        sqlSession.close();
+        if(re == null){
+            return new CommonResponse("Ok");
+        }
+        else{
+            return new CommonResponse("No");
+        }
     }
 }
