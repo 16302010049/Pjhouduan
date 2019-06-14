@@ -34,14 +34,14 @@ public class TeacherController {
         //重新生成文件名
         fileName = UUID.randomUUID()+suffixName;
         //指定本地文件夹存储图片
-        String filePath = "D:\\image\\";
+        String filePath = "/media/";
         try {
             //将图片保存到static文件夹里
             teacherRegisterRequest.getHead().transferTo(new File(filePath+fileName));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        sqlSession.insert("GJweb.Mapper.addTeacher",new Teacher(teacherRegisterRequest.getName(),teacherRegisterRequest.getPassword(),"http://localhost:8080/img/"+fileName));
+        sqlSession.insert("GJweb.Mapper.addTeacher",new Teacher(teacherRegisterRequest.getName(),teacherRegisterRequest.getPassword(),"http://52.91.208.255:8080/img/"+fileName));
         sqlSession.commit();
         sqlSession.close();
         return new GreetingResponse(12,"fjlak");
@@ -65,14 +65,14 @@ public class TeacherController {
         //重新生成文件名
         fileName = UUID.randomUUID()+suffixName;
         //指定本地文件夹存储图片
-        String filePath = "D:\\image\\";
+        String filePath = "/media/";
         try {
             //将图片保存到static文件夹里
             addLessonRequest.getBackground().transferTo(new File(filePath+fileName));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        sqlSession.insert("GJweb.Mapper.addLesson",new CourseJson(addLessonRequest.getTeacher_id(),addLessonRequest.getTitle(),addLessonRequest.getSubtitle(),"http://localhost:8080/img/"+fileName,addLessonRequest.getIntroduce(),addLessonRequest.getContent()));
+        sqlSession.insert("GJweb.Mapper.addLesson",new CourseJson(addLessonRequest.getTeacher_id(),addLessonRequest.getTitle(),addLessonRequest.getSubtitle(),"http://52.91.208.255:8080/img/"+fileName,addLessonRequest.getIntroduce(),addLessonRequest.getContent()));
         sqlSession.commit();
         sqlSession.close();
         return  new GreetingResponse(12,"fjlak");
